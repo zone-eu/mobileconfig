@@ -30,7 +30,7 @@
         "chai": "4.3.4",
         "eslint-config-nodemailer": "1.2.0",
         "eslint-config-prettier": "8.3.0",
-        "grunt": "1.4.1",
+        "grunt": "1.6.1",
         "grunt-cli": "1.4.3",
         "grunt-eslint": "23.0.0",
         "grunt-mocha-test": "0.13.3",
