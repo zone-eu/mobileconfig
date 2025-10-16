@@ -23,7 +23,7 @@
     "dependencies": {
         "handlebars": "4.7.7",
         "jsrsasign": "9.1.9",
-        "plist": "3.0.2",
+        "plist": "3.0.5",
         "uuid": "8.3.2"
     },
     "devDependencies": {
