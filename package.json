@@ -21,9 +21,9 @@
     },
     "homepage": "https://github.com/zone-eu/mobileconfig#readme",
     "dependencies": {
-        "handlebars": "4.7.7",
+        "handlebars": "4.7.9",
         "jsrsasign": "9.1.9",
-        "plist": "3.0.2",
+        "plist": "3.1.1",
         "uuid": "8.3.2"
     },
     "devDependencies": {
