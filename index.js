@@ -36,34 +36,45 @@ module.exports = {
 
         //let pem;
         let der;
+        let signedAttrs = [
+            { attr: 'contentType', type: 'data' },
+            { attr: 'messageDigest', hex: '' }
+        ];
+
+        if (options.signingTime) {
+            signedAttrs.push({ attr: 'signingTime' });
+        }
+
         let params = {
-            content: {
-                // the signed content needs to be a normal unicode string
-                str: (value || '').toString('utf-8')
+            econtent: {
+                type: 'data',
+                // Encode the content as UTF-8 bytes explicitly before signing.
+                content: {
+                    hex: Buffer.from((value || '').toString(), 'utf-8').toString('hex')
+                }
             },
 
             // join ca certs with signer cert into single array and ensure the values are strings, not Buffer object
             certs,
 
-            signerInfos: [
+            sinfos: [
                 {
+                    id: {
+                        type: 'isssn',
+                        cert: certs[certs.length - 1]
+                    },
+
                     // sha256, sha512, sha384, sha224, sha1, md5, ripemd160
-                    hashAlg: options.hashAlg || 'sha256',
-
-                    // If signingTime is true, add SigingTime signed attribute
-                    sAttr: options.signingTime
-                        ? {
-                              SigningTime: {}
-                          }
-                        : {},
-
-                    signerCert: certs[certs.length - 1],
-                    signerPrvKey: (options.key || '').toString(),
+                    hashalg: options.hashAlg || 'sha256',
+                    sattrs: {
+                        array: signedAttrs
+                    },
+                    signkey: (options.key || '').toString(),
 
                     // SHA256withRSA, SHA512withRSA, SHA384withRSA, SHA224withRSA, SHA1withRSA,MD5withRSA
                     // RIPEMD160withRSA, SHA256withECDSA, SHA512withECDSA, SHA384withECDSA, SHA224withECDSA, SHA1withECDSA
                     // SHA256withSA, SHA512withSA, SHA384withSA, SHA224withSA, SHA1withDSA
-                    sigAlg: options.sigAlg || 'SHA256withRSA'
+                    sigalg: options.sigAlg || 'SHA256withRSA'
                 }
             ]
         };

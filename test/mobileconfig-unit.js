@@ -126,6 +126,29 @@ describe('mobileconfig unit tests', () => {
                 PayloadVersion: 1
             });
         });
+
+        it('should use smtp password for outgoing auth when provided', () => {
+            let options = {
+                emailAddress: 'my-email-address@gmail.com',
+                imap: {
+                    hostname: 'imap.gmail.com',
+                    password: 'incoming-secret'
+                },
+                smtp: {
+                    hostname: 'smtp.gmail.com',
+                    username: 'my-email-address@gmail.com',
+                    password: 'outgoing-secret'
+                },
+                contentUuid: 'abcdef',
+                plistUuid: 'ghijklmn'
+            };
+
+            let emailConfig = plist.parse(mobileconfig.getEmailConfig(options));
+            let payload = emailConfig.PayloadContent[0];
+
+            expect(payload.OutgoingPassword).to.equal('outgoing-secret');
+            expect(payload).to.not.have.property('OutgoingPasswordSameAsIncomingPassword');
+        });
     });
 
     describe('#getSignedEmailConfig', () => {
