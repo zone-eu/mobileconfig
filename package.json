@@ -3,8 +3,11 @@
     "version": "2.4.4",
     "description": "Create and sign iOS mobileconfig configuration files",
     "main": "index.js",
+    "types": "index.d.ts",
+    "type": "commonjs",
     "scripts": {
-        "test": "grunt"
+        "test": "grunt",
+        "typecheck": "tsc -p tsconfig.json"
     },
     "repository": {
         "type": "git",
@@ -27,6 +30,12 @@
         "uuid": "8.3.2"
     },
     "devDependencies": {
+        "@types/chai": "4.3.20",
+        "@types/eslint-config-prettier": "6.11.3",
+        "@types/grunt": "0.4.32",
+        "@types/jsrsasign": "10.5.15",
+        "@types/mocha": "10.0.10",
+        "@types/plist": "3.0.5",
         "chai": "4.3.4",
         "eslint-config-nodemailer": "1.2.0",
         "eslint-config-prettier": "8.3.0",
@@ -34,6 +43,7 @@
         "grunt-cli": "1.4.3",
         "grunt-eslint": "23.0.0",
         "grunt-mocha-test": "0.13.3",
-        "mocha": "11.7.5"
+        "mocha": "11.7.5",
+        "typescript": "5.9.3"
     }
 }

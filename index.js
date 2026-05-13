@@ -1,3 +1,4 @@
+// @ts-check
 'use strict';
 
 const jsrsasign = require('jsrsasign');
@@ -14,28 +15,40 @@ const templates = {
     wifi: Handlebars.compile(fs.readFileSync(path.join(__dirname, 'templates', 'wifi.plist'), 'utf-8'))
 };
 
+/** @type {import('./types.d.ts').Mobileconfig} */
 module.exports = {
     sign(value, options, callback) {
         options = options || {};
 
+        /** @type {string[]} */
         let certs = [];
-        []
-            .concat(options.cert || [])
-            .concat(options.ca || [])
-            .map(ca => {
-                ca = (ca || '').toString().trim().split('END CERTIFICATE-----');
-                ca.pop();
-                ca.forEach(ca => {
-                    ca += 'END CERTIFICATE-----';
-                    certs.push(ca.trim());
-                });
-                return ca;
+        /** @type {import('./types.d.ts').PemValue[]} */
+        const chain = [];
+
+        if (options.cert) {
+            chain.push(options.cert);
+        }
+
+        if (Array.isArray(options.ca)) {
+            chain.push(...options.ca);
+        } else if (options.ca) {
+            chain.push(options.ca);
+        }
+
+        chain.forEach(entry => {
+            const parts = (entry || '').toString().trim().split('END CERTIFICATE-----');
+            parts.pop();
+            parts.forEach(part => {
+                part += 'END CERTIFICATE-----';
+                certs.push(part.trim());
             });
+        });
 
         certs = certs.reverse();
 
         //let pem;
         let der;
+        /** @type {{ attr: string, type?: string, hex?: string }[]} */
         let signedAttrs = [
             { attr: 'contentType', type: 'data' },
             { attr: 'messageDigest', hex: '' }
@@ -45,6 +58,7 @@ module.exports = {
             signedAttrs.push({ attr: 'signingTime' });
         }
 
+        /** @type {any} */
         let params = {
             econtent: {
                 type: 'data',
@@ -80,7 +94,7 @@ module.exports = {
         };
 
         try {
-            der = Buffer.from(jsrsasign.asn1.cms.CMSUtil.newSignedData(params).getContentInfoEncodedHex(), 'hex');
+            der = Buffer.from(new jsrsasign.KJUR.asn1.cms.SignedData(params).getContentInfoEncodedHex(), 'hex');
             //console.log(jsrsasign.KEYUTIL);
             //der = new Buffer(jsrsasign.KEYUTIL.getHexFromPEM(pem, 'CMS'), 'hex');
         } catch (E) {
@@ -95,6 +109,7 @@ module.exports = {
     },
 
     getEmailConfig(options, callback) {
+        options = options || {};
         let imap = options.imap || {};
         let smtp = options.smtp || {};
 
@@ -155,6 +170,7 @@ module.exports = {
     },
 
     getCardDAVConfig(options, callback) {
+        options = options || {};
         let dav = options.dav || {};
 
         let data = {
@@ -205,6 +221,7 @@ module.exports = {
     },
 
     getCalDAVConfig(options, callback) {
+        options = options || {};
         let dav = options.dav || {};
 
         let data = {
@@ -258,9 +275,9 @@ module.exports = {
         options = options || {};
         let data = {
             displayName: options.displayName,
-            encryptionType: options.wifi.encryptionType,
-            ssid: options.wifi.ssid,
-            password: options.wifi.password,
+            encryptionType: options.wifi?.encryptionType,
+            ssid: options.wifi?.ssid,
+            password: options.wifi?.password,
             organization: options.organization || false,
             contentUuid: options.contentUuid || uuid.v4(),
             plistUuid: options.plistUuid || uuid.v4()
