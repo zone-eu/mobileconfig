@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.5](https://github.com/zone-eu/mobileconfig/compare/v2.4.4...v2.4.5) (2026-05-14)
+
+
+### Bug Fixes
+
+* ZMS-63: Add typing to project ([#46](https://github.com/zone-eu/mobileconfig/issues/46)) ([56b9cb1](https://github.com/zone-eu/mobileconfig/commit/56b9cb1fa3f75b63d90b4abd39c2b74c03860b4f))
+
 ## [2.4.4](https://github.com/zone-eu/mobileconfig/compare/v2.4.3...v2.4.4) (2026-05-11)
 
 
