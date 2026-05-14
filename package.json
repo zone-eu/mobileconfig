@@ -36,6 +36,7 @@
         "@types/jsrsasign": "10.5.15",
         "@types/mocha": "10.0.10",
         "@types/plist": "3.0.5",
+        "@types/uuid": "10.0.0",
         "chai": "4.3.4",
         "eslint-config-nodemailer": "1.2.0",
         "eslint-config-prettier": "8.3.0",
