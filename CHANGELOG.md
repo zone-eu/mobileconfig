@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.6](https://github.com/zone-eu/mobileconfig/compare/v2.4.5...v2.4.6) (2026-05-18)
+
+
+### Bug Fixes
+
+* add jsdoc to funcs, make mobileconfig object more explicit in fields ([#50](https://github.com/zone-eu/mobileconfig/issues/50)) ([e75948e](https://github.com/zone-eu/mobileconfig/commit/e75948edbeb2d99635950e339f415eaf8137edd1))
+
 ## [2.4.5](https://github.com/zone-eu/mobileconfig/compare/v2.4.4...v2.4.5) (2026-05-14)
 
 
