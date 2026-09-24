@@ -4,13 +4,18 @@
 'use strict';
 
 const mobileconfig = require('../index');
-const chai = require('chai');
-const expect = chai.expect;
 const fs = require('fs');
-const plist = require('plist');
-const uuid = require('uuid');
+const { randomUUID } = require('crypto');
 
-chai.Assertion.includeStack = true;
+let expect;
+let plist;
+
+before(async () => {
+    const [chaiModule, plistModule] = await Promise.all([import('chai'), import('plist')]);
+    chaiModule.config.includeStack = true;
+    expect = chaiModule.expect;
+    plist = plistModule.default || plistModule;
+});
 
 describe('mobileconfig unit tests', () => {
     describe('#sign', () => {
@@ -376,7 +381,7 @@ describe('mobileconfig unit tests', () => {
                     PayloadType: 'Configuration',
                     PayloadVersion: 1,
                     PayloadIdentifier: 'com.my.company',
-                    PayloadUUID: uuid.v4(),
+                    PayloadUUID: randomUUID(),
                     PayloadDisplayName: 'My Gmail Account',
                     PayloadDescription: 'Install this profile to auto configure your email account',
                     PayloadOrganization: 'My Company',
@@ -385,7 +390,7 @@ describe('mobileconfig unit tests', () => {
                         PayloadType: 'com.apple.mail.managed',
                         PayloadVersion: 1,
                         PayloadIdentifier: 'com.my.company',
-                        PayloadUUID: uuid.v4(),
+                        PayloadUUID: randomUUID(),
                         PayloadDisplayName: 'IMAP Config',
                         PayloadDescription: 'Configures email account',
                         PayloadOrganization: 'My Company',
