@@ -4,9 +4,8 @@
 const jsrsasign = require('jsrsasign');
 const fs = require('fs');
 const path = require('path');
+const { randomUUID } = require('crypto');
 const Handlebars = require('handlebars');
-const uuid = require('uuid');
-const plist = require('plist');
 
 const templates = {
     imap: Handlebars.compile(fs.readFileSync(path.join(__dirname, 'templates', 'imap.plist'), 'utf-8')),
@@ -143,8 +142,8 @@ module.exports = {
                 password: smtp.password || false
             },
 
-            contentUuid: options.contentUuid || uuid.v4(),
-            plistUuid: options.plistUuid || uuid.v4()
+            contentUuid: options.contentUuid || randomUUID(),
+            plistUuid: options.plistUuid || randomUUID()
         };
 
         if (callback) {
@@ -194,8 +193,8 @@ module.exports = {
                 password: dav.password || ''
             },
 
-            contentUuid: options.contentUuid || uuid.v4(),
-            plistUuid: options.plistUuid || uuid.v4()
+            contentUuid: options.contentUuid || randomUUID(),
+            plistUuid: options.plistUuid || randomUUID()
         };
 
         if (callback) {
@@ -245,8 +244,8 @@ module.exports = {
                 password: dav.password || ''
             },
 
-            contentUuid: options.contentUuid || uuid.v4(),
-            plistUuid: options.plistUuid || uuid.v4()
+            contentUuid: options.contentUuid || randomUUID(),
+            plistUuid: options.plistUuid || randomUUID()
         };
 
         if (callback) {
@@ -279,8 +278,8 @@ module.exports = {
             ssid: options.wifi?.ssid,
             password: options.wifi?.password,
             organization: options.organization || false,
-            contentUuid: options.contentUuid || uuid.v4(),
-            plistUuid: options.plistUuid || uuid.v4()
+            contentUuid: options.contentUuid || randomUUID(),
+            plistUuid: options.plistUuid || randomUUID()
         };
 
         if (callback) {
@@ -308,14 +307,18 @@ module.exports = {
     getSignedConfig(plistData, keys, callback) {
         plistData = plistData || [];
 
-        let plistFile;
+        import('plist').then(plist => {
+            let plistFile;
 
-        try {
-            plistFile = plist.build(plistData);
-        } catch (E) {
-            return callback(E);
-        }
+            try {
+                // Our public PlistObject permits undefined values because plist's
+                // runtime builder skips them, while plist v5's declaration does not.
+                plistFile = plist.build(/** @type {import('plist').PlistValue} */ (plistData));
+            } catch (E) {
+                return callback(E);
+            }
 
-        return module.exports.sign(plistFile, keys, callback);
+            return module.exports.sign(plistFile, keys, callback);
+        }, callback);
     }
 };
