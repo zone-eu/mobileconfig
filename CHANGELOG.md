@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.8](https://github.com/zone-eu/mobileconfig/compare/v2.4.7...v2.4.8) (2026-10-27)
+
+
+### Bug Fixes
+
+* bump deps ([#59](https://github.com/zone-eu/mobileconfig/issues/59)) ([d58b6fd](https://github.com/zone-eu/mobileconfig/commit/d58b6fd15a891140296f916b18dde6703cc56079))
+
 ## [2.4.7](https://github.com/zone-eu/mobileconfig/compare/v2.4.6...v2.4.7) (2026-09-24)
 
 
